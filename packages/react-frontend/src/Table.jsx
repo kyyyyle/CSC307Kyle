@@ -13,6 +13,7 @@ function TableHeader() {
 }
 
 function TableBody(props) {
+
 const rows = props.characterData.map((row, index) => {
     return (
       <tr key={index}>
@@ -27,12 +28,14 @@ const rows = props.characterData.map((row, index) => {
     );
    }
   );
-  return (
+	
+return (
       <tbody>
         {rows}
        </tbody>
    );
 }
+
 function Table(props) {
   return (
     <table>
@@ -44,7 +47,6 @@ function Table(props) {
     </table>
   );
 }
-
 
 export default Table;
 
