@@ -8,13 +8,6 @@ function MyApp() {
 
 const [characters, setCharacters] = useState([]);
 
-function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    setCharacters(updated);
-  }
-
 function updateList(person) {
     postUser(person)
     .then(newUser => setCharacters([...characters, newUser]))
@@ -23,16 +16,29 @@ function updateList(person) {
     });
 }
 
-//
+function removeOneCharacter(index) {
+        const deleteEntry = characters[index];
+        const url = `http://localhost:8000/users/${deleteEntry.id}`;
 
-// src/MyApp.js (a new inner function inside MyApp())
+        fetch(url, {method: "DELETE"}).then(response => {
+                if(response.status === 204){
+                        const updated = characters.filter((_, i) => i !== index);
+                        setCharacters(updated);
+                } else if(response.status === 404){
+                        console.error("User not found");
+                } else {
+                        throw new Error("Failed to delete");
+                }
+        }).catch(error => {
+                console.log(error);
+        });
+  }
+
 
 function fetchUsers() {
   const promise = fetch("http://localhost:8000/users");
   return promise;
 }
-
-// src/MyApp.js (a new inner function inside MyApp())
 
 function postUser(person) {
   const promise = fetch("Http://localhost:8000/users", {

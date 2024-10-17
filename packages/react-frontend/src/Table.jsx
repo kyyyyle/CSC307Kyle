@@ -8,6 +8,7 @@ function TableHeader() {
         <th>Name</th>
         <th>Job</th>
 	<th>ID</th>
+	<th>Delete</th>
       </tr>
     </thead>
   );
