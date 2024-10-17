@@ -78,7 +78,7 @@ const findUserById = (id) =>
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   let result = findUserById(id);
-  if (result === undefined) {
+  if (!result) {
     res.status(404).send("Resource not found.");
   } else {
     res.send(result);
@@ -92,8 +92,10 @@ const addUser = (user) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+	userToAdd.id = Math.random().toString(36).substr(2, 9);
+  let result = addUser(userToAdd);
+  //res.send();
+	res.status(201).send(result);
 });
 
 

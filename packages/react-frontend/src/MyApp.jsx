@@ -1,9 +1,8 @@
 // src/MyApp.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import Form from "./Form";
 
-import React, { useState, useEffect } from "react";
 
 function MyApp() {
 
@@ -17,23 +16,39 @@ function removeOneCharacter(index) {
   }
 
 function updateList(person) {
-  setCharacters([...characters, person]);
+    postUser(person)
+    .then(newUser => setCharacters([...characters, newUser]))
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
-return (
-  <div className="container">
-    <Table
-      characterData={characters}
-      removeCharacter={removeOneCharacter}
-    />
-    <Form handleSubmit={updateList} />
-  </div>
-);
+//
 
 // src/MyApp.js (a new inner function inside MyApp())
 
 function fetchUsers() {
   const promise = fetch("http://localhost:8000/users");
+  return promise;
+}
+
+// src/MyApp.js (a new inner function inside MyApp())
+
+function postUser(person) {
+  const promise = fetch("Http://localhost:8000/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(person)
+  }).then(response => {
+	if (response.status === 201){
+		return response.json();
+	}else{
+		throw new Error("Failed to add")
+	}
+  });
+
   return promise;
 }
 
@@ -45,6 +60,17 @@ useEffect(() => {
       console.log(error);
     });
 }, [])
+
+return (
+  <div className="container">
+    <Table
+      characterData={characters}
+      removeCharacter={removeOneCharacter}
+    />
+    <Form handleSubmit={updateList} />
+  </div>
+);
+
 
 }
 export default MyApp;
